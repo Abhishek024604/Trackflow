@@ -1,6 +1,6 @@
 # Tracker Application
 
-Task Tracker Application for software teams
+Task Tracker Application for software teams (Demo Application for our MVP)
 
 This repository is kept by ParallelFlow. Each commit is an approved stage gate or an update of the logs.
 
