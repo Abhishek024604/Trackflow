@@ -28,4 +28,4 @@ Task Tracker Application for software teams
 
 ## Approved documents
 
-None yet.
+- docs/plan/requirements.md

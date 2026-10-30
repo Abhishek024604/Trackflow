@@ -1,6 +1,6 @@
 # Tracker Application
 
-Task Tracker Application for software teams (Demo Application for our MVP)
+Task Tracker Application for software teams
 
 This repository is kept by ParallelFlow. Each commit is an approved stage gate or an update of the logs.
 
@@ -10,4 +10,4 @@ This repository is kept by ParallelFlow. Each commit is an approved stage gate o
 
 ## Approved documents
 
-None yet.
+- [docs/plan/requirements.md](docs/plan/requirements.md)
