@@ -1,0 +1,160 @@
+version: 2
+system:
+  name: TrackFlow
+  description: Lightweight AI-powered issue tracker for small software teams (3-15 people) with Kanban boards, team workspaces, threaded comments, activity feeds, and AI-driven priority/categorization suggestions.
+
+actors:
+  - id: team-lead
+    name: Team Lead
+    description: Creates teams, manages members, configures board columns (FR-006, ACT-001)
+  - id: team-member
+    name: Team Member
+    description: Creates, assigns, resolves issues; comments; views feed (FR-001, FR-002, FR-007, FR-008, FR-010, ACT-002)
+  - id: guest
+    name: Guest
+    description: View-only access to team boards (FR-006, ACT-003)
+  - id: github-oauth
+    name: GitHub OAuth Provider
+    description: External OAuth 2.0 identity provider (FR-005)
+  - id: llm-provider
+    name: LLM Provider
+    description: External LLM service for on-demand AI suggestions (FR-003, FR-004, CON-005, NFR-006)
+
+externals:
+  - id: neon-postgres
+    name: Neon Postgres
+    description: Managed Postgres database (CON-001, NFR-003)
+  - id: vercel
+    name: Vercel
+    description: Free-tier hosting and deployment platform (CON-003)
+
+components:
+  - id: CMP-001
+    name: Web Client
+    kind: ui
+    tech: Next.js App Router + TypeScript + Tailwind + shadcn/ui
+    description: React UI pages (auth, workspace dashboard, board, issue detail, comments, feed), navigation, responsive layout (NFR-005).
+    satisfies: [FR-001, FR-002, FR-005, FR-006, FR-007, FR-008, FR-009, FR-010, NFR-002, NFR-005]
+    adrs: [ADR-0001, ADR-0002]
+    code: [pages/, components/]
+  - id: CMP-002
+    name: Auth Module
+    kind: service
+    tech: Auth.js (NextAuth) + TypeScript
+    description: Email/password and GitHub OAuth authentication, session management, protected routes (FR-005).
+    satisfies: [FR-005, NFR-004]
+    adrs: [ADR-0001]
+    code: [auth/, app/api/auth/]
+  - id: CMP-003
+    name: Workspace Module
+    kind: service
+    tech: Next.js API routes + Prisma
+    description: Team creation/join, workspace settings, board column customization, member management (FR-006).
+    satisfies: [FR-002, FR-006, FR-010]
+    adrs: [ADR-0001, ADR-0002]
+    code: [app/api/teams/, app/api/workspaces/]
+  - id: CMP-004
+    name: Board & Issue Module
+    kind: service
+    tech: Next.js API routes + Prisma
+    description: Issue CRUD (FR-001), Kanban board rendering (FR-002), assignment (FR-010), full-text search with filters (FR-009), priority/category storage.
+    satisfies: [FR-001, FR-002, FR-009, FR-010]
+    adrs: [ADR-0001, ADR-0002]
+    code: [app/api/issues/, app/api/boards/]
+  - id: CMP-005
+    name: AI Module
+    kind: service
+    tech: TypeScript adapter interface + LLM provider
+    description: On-demand AI suggestions for priority (FR-003) and category (FR-004). Abstracted adapter to avoid vendor lock-in; runs only when user requests (NFR-006, CON-005).
+    satisfies: [FR-003, FR-004, NFR-006, CON-005]
+    adrs: [ADR-0001]
+    code: [lib/llm/, app/api/ai/]
+  - id: CMP-006
+    name: Comments & Feed Module
+    kind: service
+    tech: Next.js API routes + Prisma
+    description: Threaded comments with @mentions (FR-007, AC-003, AC-004), edit/delete own comments (AC-005, AC-006), team-wide activity feed (FR-008) with filtering (AC-009) and page-load refresh (AC-010, MVP). Comment count on board.
+    satisfies: [FR-007, FR-008, NFR-001, NFR-006]
+    adrs: [ADR-0001, ADR-0002]
+    code: [app/api/comments/, app/api/feed/]
+  - id: CMP-007
+    name: Database
+    kind: database
+    tech: Postgres (Neon)
+    description: Persistent storage for users, teams, workspaces, issues, comments, feed events. Schema defined by Prisma; migrations tracked.
+    satisfies: [NFR-003, CON-001]
+    adrs: [ADR-0002]
+    code: [prisma/schema.prisma]
+
+relations:
+  - { from: team-lead, to: CMP-001, label: 'uses (HTTPS)', kind: sync }
+  - { from: team-member, to: CMP-001, label: 'uses (HTTPS)', kind: sync }
+  - { from: guest, to: CMP-001, label: 'uses (HTTPS, read-only)', kind: sync }
+  - { from: CMP-001, to: CMP-002, label: 'auth requests', kind: sync }
+  - { from: CMP-001, to: CMP-003, label: 'workspace actions', kind: sync }
+  - { from: CMP-001, to: CMP-004, label: 'board/issue actions', kind: sync }
+  - { from: CMP-001, to: CMP-006, label: 'comments/feed actions', kind: sync }
+  - { from: CMP-002, to: github-oauth, label: 'OAuth handshake', kind: sync }
+  - { from: CMP-002, to: CMP-007, label: 'user/session queries', kind: sync }
+  - { from: CMP-003, to: CMP-007, label: 'team/workspace data', kind: sync }
+  - { from: CMP-003, to: CMP-004, label: 'board config', kind: sync }
+  - { from: CMP-004, to: CMP-007, label: 'issue/query data', kind: sync }
+  - { from: CMP-004, to: CMP-005, label: 'AI request (optional)', kind: sync }
+  - { from: CMP-005, to: llm-provider, label: 'LLM prompt (on-demand)', kind: sync }
+  - { from: CMP-006, to: CMP-007, label: 'comment/feed data', kind: sync }
+  - { from: CMP-006, to: CMP-004, label: 'comment count', kind: sync }
+  - { from: CMP-006, to: CMP-003, label: 'feed events by team', kind: sync }
+
+flows:
+  - id: FLW-001
+    name: Auth & Workspace Setup (STORY-001)
+    description: User authenticates and creates a team / workspace.
+    steps:
+      - { from: team-lead, to: CMP-001, label: 'Navigate / sign in' }
+      - { from: CMP-001, to: CMP-002, label: 'Auth request (email/GitHub)' }
+      - { from: CMP-002, to: github-oauth, label: 'OAuth handshake (if GitHub)' }
+      - { from: CMP-002, to: CMP-001, label: 'Session / token' }
+      - { from: CMP-001, to: CMP-003, label: 'Create team + workspace' }
+      - { from: CMP-003, to: CMP-007, label: 'Persist team/workspace' }
+      - { from: CMP-003, to: CMP-004, label: 'Initialize default board columns' }
+    quality: [NFR-002 (under 5 min onboarding)]
+
+  - id: FLW-002
+    name: Issue Board & AI Suggestions (STORY-002)
+    description: User views board, creates/updates issue, requests AI priority/category.
+    steps:
+      - { from: team-member, to: CMP-001, label: 'Open board' }
+      - { from: CMP-001, to: CMP-004, label: 'Fetch board + issues' }
+      - { from: CMP-004, to: CMP-007, label: 'Query issues by team/status' }
+      - { from: CMP-001, to: CMP-004, label: 'Create/update issue' }
+      - { from: CMP-004, to: CMP-007, label: 'Persist issue' }
+      - { from: team-member, to: CMP-005, label: 'Request AI suggestion' }
+      - { from: CMP-005, to: llm-provider, label: 'Send prompt (title + content)' }
+      - { from: CMP-005, to: CMP-001, label: 'Return priority/category hint' }
+      - { from: CMP-001, to: CMP-004, label: 'Apply suggestion (optional)' }
+    quality: [NFR-001 (<2s board load), NFR-006 (on-demand AI), CON-005 (suggestion only)]
+
+  - id: FLW-003
+    name: Comments & Activity Feed (STORY-003)
+    description: User comments on an issue, mentions teammate, and views feed.
+    steps:
+      - { from: team-member, to: CMP-001, label: 'Open issue detail' }
+      - { from: CMP-001, to: CMP-006, label: 'Post comment / reply' }
+      - { from: CMP-006, to: CMP-007, label: 'Persist comment + mention tag' }
+      - { from: CMP-006, to: CMP-003, label: 'Resolve team member' }
+      - { from: CMP-006, to: CMP-004, label: 'Update comment count' }
+      - { from: CMP-006, to: CMP-007, label: 'Insert feed event' }
+      - { from: CMP-001, to: CMP-006, label: 'Edit / delete own comment' }
+      - { from: CMP-001, to: CMP-006, label: 'View feed (filter: my / all)' }
+      - { from: CMP-006, to: CMP-007, label: 'Query feed events' }
+    quality: [NFR-001 (<2s load), NFR-006 (no real-time dependency for feed; refresh on load per AC-010, MVP)]
+
+deployment:
+  - id: vercel-deploy
+    name: Vercel Production
+    kind: serverless
+    contains: [CMP-001, CMP-002, CMP-003, CMP-004, CMP-005, CMP-006]
+  - id: neon-prod
+    name: Neon Postgres Production
+    kind: managed-service
+    contains: [CMP-007]
