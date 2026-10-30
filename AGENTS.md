@@ -28,4 +28,5 @@ Task Tracker Application for software teams
 
 ## Approved documents
 
+- docs/design/architecture/lld/CMP-004/openapi.yaml
 - docs/plan/requirements.md

@@ -1,0 +1,132 @@
+openapi: 3.1.0
+info:
+  title: Board & Issue Module API (CMP-004)
+  version: 1.0.0
+  description: Kanban board, issue CRUD, assignment, search, and AI adapter endpoints.
+paths:
+  /api/boards/{teamId}:
+    get:
+      summary: Get board for team
+      description: Returns board columns and issues for a team (FR-002, FR-001, NFR-001).
+      tags: [Board]
+      parameters:
+        - name: teamId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Board + columns + cards, content: { application/json: { schema: { type: object } } } }
+        '404': { description: Team not found }
+        '500': { description: DB error }
+  /api/issues:
+    post:
+      summary: Create issue
+      description: Creates a new issue (FR-001, NFR-002 simplicity).
+      tags: [Issues]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueCreate'
+      responses:
+        '201': { description: Issue created, content: { application/json: { schema: { $ref: '#/components/schemas/Issue' } } } }
+        '400': { description: Invalid data }
+        '403': { description: Not team member }
+        '500': { description: DB error }
+  /api/issues/{id}:
+    patch:
+      summary: Update issue
+      description: Updates issue fields including assignee (FR-010) and may trigger AI adapter (optional, FR-003, FR-004). Only assignee or project admin (TeamMember.role == LEAD) may set status to Done; others receive 403.
+      tags: [Issues]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueUpdate'
+      responses:
+        '200': { description: Updated issue }
+        '400': { description: Invalid data }
+        '403': { description: Not assignee or admin; moving to Done forbidden }
+        '404': { description: Issue not found }
+        '500': { description: DB or AI adapter error (AI failure handled gracefully per NFR-006) }
+    get:
+      summary: Get issue detail
+      description: Returns single issue with comments count (FR-001, FR-007).
+      tags: [Issues]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Issue detail, content: { application/json: { schema: { $ref: '#/components/schemas/Issue' } } } }
+        '404': { description: Issue not found }
+  /api/search:
+    get:
+      summary: Search issues
+      description: Full-text search across team issues with filters (FR-009).
+      tags: [Issues]
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: assigneeId
+          in: query
+          schema: { type: string }
+      responses:
+        '200': { description: Search results, content: { application/json: { schema: { type: object, properties: { results: { type: array, items: { $ref: '#/components/schemas/Issue' } } } } } } }
+  /api/ai/suggest:
+    get:
+      summary: AI suggestion
+      description: On-demand AI priority/category suggestion; never enforced automatically (FR-003, FR-004, CON-005, NFR-006).
+      tags: [AI]
+      parameters:
+        - name: issueId
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Suggestion result, content: { application/json: { schema: { type: object, properties: { priority: { type: string }, category: { type: string }, available: { type: boolean } } } } } }
+        '500': { description: LLM unavailable; returns available=false (resilience per NFR-006) }
+components:
+  schemas:
+    Issue:
+      type: object
+      properties:
+        id: { type: string }
+        title: { type: string }
+        description: { type: string }
+        status: { type: string }
+        priority: { type: string }
+        category: { type: string }
+        assigneeId: { type: string }
+        teamId: { type: string }
+        createdAt: { type: string, format: date-time }
+    IssueCreate:
+      type: object
+      required: [title, teamId]
+      properties:
+        title: { type: string }
+        description: { type: string }
+        teamId: { type: string }
+        priority: { type: string, enum: [low, medium, high] }
+        category: { type: string, enum: [feature, bug, task] }
+    IssueUpdate:
+      type: object
+      properties:
+        title: { type: string }
+        description: { type: string }
+        status: { type: string }
+        priority: { type: string }
+        category: { type: string }
+        assigneeId: { type: string }

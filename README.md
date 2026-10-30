@@ -10,4 +10,5 @@ This repository is kept by ParallelFlow. Each commit is an approved stage gate o
 
 ## Approved documents
 
+- [docs/design/architecture/lld/CMP-004/openapi.yaml](docs/design/architecture/lld/CMP-004/openapi.yaml)
 - [docs/plan/requirements.md](docs/plan/requirements.md)
