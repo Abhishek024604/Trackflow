@@ -1,0 +1,109 @@
+openapi: 3.1.0
+info:
+  title: Auth Module API (CMP-002)
+  version: 1.0.0
+  description: Authentication and session management endpoints for TrackFlow.
+paths:
+  /api/auth/session:
+    get:
+      summary: Get current session
+      description: Returns the current user session or null (FR-005, NFR-004).
+      tags: [Auth]
+      responses:
+        '200':
+          description: Session or null
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/UserSession'
+        '401':
+          description: Not authenticated (only if enforcing protected routes; session endpoint returns null for guests)
+      security:
+        - cookieAuth: []
+  /api/auth/signin:
+    post:
+      summary: Email/password sign-in
+      description: Authenticates a user with email and password (FR-005).
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+      responses:
+        '200':
+          description: Session cookie set; redirect or JSON success
+        '401':
+          description: Invalid credentials
+        '500':
+          description: DB or auth provider error
+  /api/auth/signin/github:
+    get:
+      summary: Initiate GitHub OAuth
+      description: Starts the GitHub OAuth flow (FR-005).
+      tags: [Auth]
+      responses:
+        '302':
+          description: Redirect to GitHub authorization URL
+        '500':
+          description: OAuth configuration error
+  /api/auth/callback/github:
+    get:
+      summary: GitHub OAuth callback
+      description: Handles GitHub OAuth response, creates/finds user, sets session (FR-005).
+      tags: [Auth]
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to workspace/dashboard
+        '401':
+          description: OAuth verification failed
+        '500':
+          description: DB or OAuth error
+  /api/auth/signout:
+    post:
+      summary: Sign out
+      description: Clears the session cookie (FR-005).
+      tags: [Auth]
+      responses:
+        '200':
+          description: Session cleared
+        '500':
+          description: Internal error
+components:
+  schemas:
+    UserSession:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        githubId:
+          type: string
+    SignInRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 1
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: next-auth.session-token
