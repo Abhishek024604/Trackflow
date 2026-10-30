@@ -8,7 +8,7 @@
 
 ### Friday, 30 October 2026
 
-- **PLAN gate approved by Abhishek Singh, with requirements.md**
+- **PLAN gate approved by Abhishek Singh on 2026-10-30, with requirements.md**
 
 ## Open questions
 
@@ -18,6 +18,4 @@ None right now.
 
 ### Friday, 30 October 2026
 
-> PLAN was approved and the cycle moved to DESIGN.
-
-_Written from the recorded decisions: the AI could not summarise this day._
+> The PLAN gate was approved, moving the cycle into DESIGN stage. The team updated requirements and planning documents.
