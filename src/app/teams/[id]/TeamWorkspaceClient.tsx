@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { ActivityFeed } from '@/components/feed/ActivityFeed';
 
 interface User {
   id: string;
@@ -126,7 +127,7 @@ export default function TeamWorkspaceClient({
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Team Members Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -168,6 +169,15 @@ export default function TeamWorkspaceClient({
                 ))}
               </CardContent>
             </Card>
+
+            {/* Team Activity Feed (STORY-003) */}
+            <ActivityFeed teamId={team.id} compact pageSize={10} />
+            <Link
+              href={`/teams/${team.id}/activity`}
+              className="block text-center text-xs font-medium text-indigo-600 hover:underline dark:text-indigo-400"
+            >
+              View all activity
+            </Link>
           </div>
 
           {/* Main Content */}
