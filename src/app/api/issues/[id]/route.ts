@@ -9,13 +9,13 @@ type Params = { params: Promise<{ id: string }> | { id: string } };
 async function loadForMember(id: string) {
   const session = await auth();
   if (!session?.user?.id) {
-    return { error: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }) } as const;
+    return { ok: false, response: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }) } as const;
   }
   const userId = session.user.id;
 
   const issue = await prisma.issue.findUnique({ where: { id } });
   if (!issue) {
-    return { error: NextResponse.json({ error: 'Issue not found' }, { status: 404 }) } as const;
+    return { ok: false, response: NextResponse.json({ error: 'Issue not found' }, { status: 404 }) } as const;
   }
 
   const membership = await prisma.teamMember.findUnique({
@@ -23,18 +23,18 @@ async function loadForMember(id: string) {
   });
   if (!membership) {
     // Do not reveal issues of teams the caller is not in.
-    return { error: NextResponse.json({ error: 'Issue not found' }, { status: 404 }) } as const;
+    return { ok: false, response: NextResponse.json({ error: 'Issue not found' }, { status: 404 }) } as const;
   }
 
-  return { issue, membership, userId } as const;
+  return { ok: true, issue, membership, userId } as const;
 }
 
 // GET /api/issues/{id} — issue detail with comment count.
-export async function GET(_request: NextRequest, { params }: Params) {
+export async function GET(_request: NextRequest, { params }: Params): Promise<NextResponse> {
   const { id } = await params;
   try {
     const loaded = await loadForMember(id);
-    if ('error' in loaded) return loaded.error;
+    if (!loaded.ok) return loaded.response;
 
     const issue = await prisma.issue.findUnique({
       where: { id },
@@ -48,7 +48,7 @@ export async function GET(_request: NextRequest, { params }: Params) {
 }
 
 // PATCH /api/issues/{id} — update fields, assignee or status (column move).
-export async function PATCH(request: NextRequest, { params }: Params) {
+export async function PATCH(request: NextRequest, { params }: Params): Promise<NextResponse> {
   const { id } = await params;
 
   let body: unknown;
@@ -66,7 +66,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 
   try {
     const loaded = await loadForMember(id);
-    if ('error' in loaded) return loaded.error;
+    if (!loaded.ok) return loaded.response;
     const { issue, membership, userId } = loaded;
 
     const data: Record<string, unknown> = {};
@@ -123,11 +123,11 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 }
 
 // DELETE /api/issues/{id} — the creator or a project lead may delete.
-export async function DELETE(_request: NextRequest, { params }: Params) {
+export async function DELETE(_request: NextRequest, { params }: Params): Promise<NextResponse> {
   const { id } = await params;
   try {
     const loaded = await loadForMember(id);
-    if ('error' in loaded) return loaded.error;
+    if (!loaded.ok) return loaded.response;
     const { issue, membership, userId } = loaded;
 
     if (membership.role !== 'LEAD' && issue.creatorId !== userId) {

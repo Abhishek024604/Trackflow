@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { canMoveToDone, createIssueSchema, isDoneColumn, issueInclude } from '@/lib/issues';
 
 // POST /api/issues — create an issue (FR-001). Defaults: first column ("To Do"), priority MEDIUM.
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

@@ -6,7 +6,7 @@ import { issueInclude } from '@/lib/issues';
 type Params = { params: Promise<{ teamId: string }> | { teamId: string } };
 
 // GET /api/boards/{teamId} — board columns, issues and members for one team (FR-002).
-export async function GET(_request: NextRequest, { params }: Params) {
+export async function GET(_request: NextRequest, { params }: Params): Promise<NextResponse> {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
