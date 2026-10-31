@@ -6,6 +6,7 @@ import { ChevronLeft, Plus, Search } from 'lucide-react';
 import { Board } from './Board';
 import { BoardSkeleton } from './BoardSkeleton';
 import { IssueDialog } from './IssueDialog';
+import { SignOutButton } from '@/components/SignOutButton';
 import { displayName, type BoardData, type BoardIssue, type IssueFormValues } from './types';
 
 type DialogState = { mode: 'create' } | { mode: 'edit'; issue: BoardIssue } | null;
@@ -25,7 +26,7 @@ function isTypingTarget(target: EventTarget | null): boolean {
   return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target.isContentEditable;
 }
 
-export function BoardClient({ teamId }: { teamId: string }) {
+export function BoardClient({ teamId, openNewIssue = false }: { teamId: string; openNewIssue?: boolean }) {
   const [data, setData] = useState<BoardData | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -50,6 +51,20 @@ export function BoardClient({ teamId }: { teamId: string }) {
   useEffect(() => {
     load();
   }, [load]);
+
+  // Arriving with ?new=1 opens "New issue" once the board has loaded; the flag is then dropped
+  // from the URL so a refresh or Back does not reopen it.
+  const [pendingNewIssue, setPendingNewIssue] = useState(openNewIssue);
+  useEffect(() => {
+    if (!pendingNewIssue || !data) return;
+    setPendingNewIssue(false);
+    setDialog({ mode: 'create' });
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('new')) {
+      url.searchParams.delete('new');
+      window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash);
+    }
+  }, [pendingNewIssue, data]);
 
   // Keyboard shortcut: C opens "New issue" (ignored while typing or with modifiers).
   useEffect(() => {
@@ -157,29 +172,33 @@ export function BoardClient({ teamId }: { teamId: string }) {
   const filtering = query.trim() !== '' || assigneeFilter !== '';
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#0b0b0d] text-zinc-200">
-      <header className="flex h-12 items-center justify-between border-b border-zinc-800/80 px-4">
-        <div className="flex items-center gap-2">
+    <div className="flex min-h-screen flex-col bg-background text-zinc-200">
+      <header className="flex h-14 items-center justify-between gap-4 border-b border-border px-4">
+        <div className="flex min-w-0 items-center gap-3">
           <Link
             href={`/teams/${teamId}`}
             aria-label="Back to team"
-            className="rounded p-1 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200"
+            title="Back to team"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-5 w-5" />
           </Link>
-          <h1 className="text-sm font-medium text-zinc-100">{data?.team.name ?? 'Board'}</h1>
-          <span className="text-sm text-zinc-600">/ Board</span>
+          <h1 className="truncate text-sm font-semibold text-zinc-100">{data?.team.name ?? 'Board'}</h1>
+          <span className="hidden whitespace-nowrap text-sm text-zinc-400 sm:inline">/ Board</span>
         </div>
-        <button
-          type="button"
-          onClick={() => setDialog({ mode: 'create' })}
-          disabled={!data}
-          className="flex items-center gap-1.5 rounded-md bg-indigo-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
-        >
-          <Plus className="h-3.5 w-3.5" />
-          New issue
-          <kbd className="ml-1 rounded border border-white/20 px-1 text-[10px] font-normal text-indigo-100">C</kbd>
-        </button>
+        <div className="flex shrink-0 items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setDialog({ mode: 'create' })}
+            disabled={!data}
+            className="flex h-9 items-center gap-1.5 rounded-md bg-primary px-3 text-sm font-medium text-white hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50"
+          >
+            <Plus className="h-4 w-4" />
+            New issue
+            <kbd className="ml-1 hidden rounded border border-white/30 px-1 text-[10px] font-normal text-indigo-100 sm:inline">C</kbd>
+          </button>
+          <SignOutButton />
+        </div>
       </header>
 
       <div className="flex items-center gap-2 border-b border-zinc-800/80 px-4 py-2">
@@ -191,14 +210,14 @@ export function BoardClient({ teamId }: { teamId: string }) {
             placeholder="Search issues"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-56 rounded-md border border-zinc-800 bg-zinc-900 py-1 pl-7 pr-2 text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-indigo-500 focus:outline-none"
+            className="h-8 w-56 rounded-md border border-zinc-800 bg-zinc-900 pl-7 pr-2 text-xs text-zinc-200 placeholder:text-zinc-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
           />
         </div>
         <select
           aria-label="Filter by assignee"
           value={assigneeFilter}
           onChange={(e) => setAssigneeFilter(e.target.value)}
-          className="rounded-md border border-zinc-800 bg-zinc-900 px-2 py-1 text-xs text-zinc-300 focus:border-indigo-500 focus:outline-none"
+          className="h-8 rounded-md border border-zinc-800 bg-zinc-900 px-2 text-xs text-zinc-300 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
         >
           <option value="">All assignees</option>
           <option value="unassigned">Unassigned</option>
@@ -230,13 +249,13 @@ export function BoardClient({ teamId }: { teamId: string }) {
               <Plus className="h-5 w-5 text-zinc-500" />
             </div>
             <h2 className="text-sm font-medium text-zinc-200">No issues yet</h2>
-            <p className="mt-1 text-xs text-zinc-500">
+            <p className="mt-1 text-xs text-zinc-400">
               Create the first issue for your team. Press <kbd className="rounded border border-zinc-700 px-1">C</kbd> anytime.
             </p>
             <button
               type="button"
               onClick={() => setDialog({ mode: 'create' })}
-              className="mt-4 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
+              className="mt-4 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               Create issue
             </button>
@@ -244,7 +263,7 @@ export function BoardClient({ teamId }: { teamId: string }) {
         ) : (
           <>
             {filtering && visibleIssues.length === 0 && (
-              <p className="mb-3 text-xs text-zinc-500">No issues match your filters.</p>
+              <p className="mb-3 text-xs text-zinc-400">No issues match your filters.</p>
             )}
             <Board
               columns={data.columns}

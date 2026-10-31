@@ -84,10 +84,16 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-900">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12">
+      <div className="mb-8 flex items-center gap-2 text-base font-semibold text-foreground">
+        <span aria-hidden className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-sm font-bold text-primary-foreground">
+          T
+        </span>
+        TrackFlow
+      </div>
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
+          <CardTitle className="text-center text-xl font-semibold">Create an account</CardTitle>
           <CardDescription className="text-center">
             Start tracking issues with your team
           </CardDescription>
@@ -111,7 +117,7 @@ export default function SignUpPage() {
                 disabled={isLoading}
               />
               {errors.name && (
-                <p className="text-sm text-red-500">{errors.name.message}</p>
+                <p className="text-sm text-red-400">{errors.name.message}</p>
               )}
             </div>
 
@@ -126,7 +132,7 @@ export default function SignUpPage() {
                 disabled={isLoading}
               />
               {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
+                <p className="text-sm text-red-400">{errors.email.message}</p>
               )}
             </div>
 
@@ -141,7 +147,7 @@ export default function SignUpPage() {
                 disabled={isLoading}
               />
               {errors.password && (
-                <p className="text-sm text-red-500">{errors.password.message}</p>
+                <p className="text-sm text-red-400">{errors.password.message}</p>
               )}
             </div>
 
@@ -156,7 +162,7 @@ export default function SignUpPage() {
                 disabled={isLoading}
               />
               {errors.confirmPassword && (
-                <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
+                <p className="text-sm text-red-400">{errors.confirmPassword.message}</p>
               )}
             </div>
 
@@ -168,7 +174,7 @@ export default function SignUpPage() {
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
             Already have an account?{' '}
-            <Link href="/auth/signin" className="text-primary hover:underline font-medium">
+            <Link href="/auth/signin" className="font-medium text-indigo-300 hover:text-indigo-200 hover:underline">
               Sign in
             </Link>
           </p>

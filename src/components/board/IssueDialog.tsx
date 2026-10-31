@@ -18,7 +18,7 @@ interface IssueDialogProps {
 }
 
 const fieldClass =
-  'w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500';
+  'w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500';
 const labelClass = 'mb-1 block text-xs font-medium text-zinc-400';
 
 export function IssueDialog({ issue, columns, members, defaultStatus, onSubmit, onDelete, onClose }: IssueDialogProps) {
@@ -91,7 +91,7 @@ export function IssueDialog({ issue, columns, members, defaultStatus, onSubmit, 
             <h2 id="issue-dialog-title" className="text-sm font-medium text-zinc-200">
               {isEdit ? 'Issue details' : 'New issue'}
             </h2>
-            <button type="button" onClick={onClose} aria-label="Close" className="rounded p-1 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200">
+            <button type="button" onClick={onClose} aria-label="Close" className="rounded p-1 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <X className="h-4 w-4" />
             </button>
           </div>
@@ -185,13 +185,13 @@ export function IssueDialog({ issue, columns, members, defaultStatus, onSubmit, 
               )}
             </div>
             <div className="flex gap-2">
-              <button type="button" onClick={onClose} className="rounded-md px-3 py-1.5 text-xs font-medium text-zinc-400 hover:bg-zinc-800">
+              <button type="button" onClick={onClose} className="rounded-md px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={busy}
-                className="rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
+                className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 disabled:opacity-50"
               >
                 {isEdit ? 'Save changes' : 'Create issue'}
               </button>

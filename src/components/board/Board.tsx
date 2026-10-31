@@ -52,12 +52,12 @@ export function Board({ columns, issues, onMove, onOpen }: BoardProps) {
             <header className="flex items-center gap-2 px-3 py-2.5">
               <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: column.color }} aria-hidden />
               <h2 className="text-[13px] font-medium text-zinc-200">{column.name}</h2>
-              <span className="text-xs text-zinc-500">{columnIssues.length}</span>
+              <span className="text-xs text-zinc-400">{columnIssues.length}</span>
             </header>
 
             <ul className="flex min-h-[120px] flex-1 flex-col gap-2 px-2 pb-2">
               {columnIssues.length === 0 && (
-                <li className="rounded-md border border-dashed border-zinc-800 px-3 py-6 text-center text-xs text-zinc-500">
+                <li className="rounded-md border border-dashed border-zinc-800 px-3 py-6 text-center text-xs text-zinc-400">
                   No issues here. Drag one in.
                 </li>
               )}
@@ -77,7 +77,7 @@ export function Board({ columns, issues, onMove, onOpen }: BoardProps) {
                     }}
                     onDragEnd={() => setOverColumn(null)}
                     className={cn(
-                      'group cursor-grab rounded-md border border-l-2 border-zinc-800 bg-zinc-900 p-3 shadow-sm',
+                      'group cursor-grab rounded-md border border-l-2 border-zinc-800 bg-zinc-900 p-3',
                       'transition-colors hover:border-zinc-700 hover:bg-zinc-800/80 active:cursor-grabbing',
                       PRIORITY_STYLES[issue.priority].accent
                     )}
@@ -86,12 +86,12 @@ export function Board({ columns, issues, onMove, onOpen }: BoardProps) {
                       type="button"
                       onClick={() => onOpen(issue)}
                       title={issue.title}
-                      className="block w-full truncate text-left text-[13px] font-medium text-zinc-100 focus:outline-none focus-visible:underline"
+                      className="block w-full truncate rounded-sm text-left text-[13px] font-medium text-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       {issue.title}
                     </button>
                     {issue.description && (
-                      <p className="mt-1 line-clamp-2 text-xs text-zinc-500">{issue.description}</p>
+                      <p className="mt-1 line-clamp-2 text-xs text-zinc-400">{issue.description}</p>
                     )}
                     <div className="mt-3 flex items-center justify-between gap-2">
                       <PriorityBadge priority={issue.priority} />
@@ -103,7 +103,7 @@ export function Board({ columns, issues, onMove, onOpen }: BoardProps) {
                           id={`move-${issue.id}`}
                           value={issue.status}
                           onChange={(e) => onMove(issue.id, e.target.value)}
-                          className="rounded border border-zinc-800 bg-zinc-950 px-1 py-0.5 text-[11px] text-zinc-400 opacity-70 focus:opacity-100 group-hover:opacity-100"
+                          className="rounded border border-zinc-700 bg-zinc-950 px-1 py-0.5 text-[11px] text-zinc-300 hover:border-zinc-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                         >
                           {columns.map((c) => (
                             <option key={c.id} value={c.name}>

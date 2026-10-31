@@ -98,13 +98,13 @@ export function ActivityFeed({ teamId, compact = false, pageSize, className }: A
     <section
       aria-label="Team activity"
       className={cn(
-        'rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900/70',
+        'rounded-lg border border-gray-200 bg-white dark:border-border dark:bg-card',
         className
       )}
     >
-      <header className="flex items-center justify-between gap-2 border-b border-gray-200 px-4 py-3 dark:border-gray-800">
+      <header className="flex items-center justify-between gap-2 border-b border-gray-200 px-4 py-3 dark:border-border">
         <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
-          <Activity className="h-4 w-4 text-indigo-500" />
+          <Activity className="h-4 w-4 text-indigo-400" />
           Activity
         </h2>
         <div className="flex items-center gap-1">
@@ -124,7 +124,7 @@ export function ActivityFeed({ teamId, compact = false, pageSize, className }: A
                 className={cn(
                   'rounded px-2 py-1 font-medium transition-colors',
                   filter === value
-                    ? 'bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-gray-100'
+                    ? 'bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100'
                     : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200'
                 )}
               >
@@ -209,7 +209,7 @@ function FeedItem({ event, teamId }: { event: FeedEventDto; teamId: string }) {
         {actorName[0]?.toUpperCase()}
         <Icon
           className={cn(
-            'absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full bg-white p-px dark:bg-gray-900',
+            'absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full bg-white p-px dark:bg-card',
             ACTION_TINT[event.action] ?? 'text-gray-400'
           )}
         />
@@ -222,7 +222,7 @@ function FeedItem({ event, teamId }: { event: FeedEventDto; teamId: string }) {
         ) : (
           body
         )}
-        <time dateTime={event.timestamp} className="block text-xs text-gray-400 dark:text-gray-500">
+        <time dateTime={event.timestamp} className="block text-xs text-gray-500 dark:text-gray-400">
           {timeAgo(event.timestamp)}
         </time>
       </div>

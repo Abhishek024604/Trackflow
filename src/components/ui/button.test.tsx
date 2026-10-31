@@ -19,6 +19,17 @@ describe('Button', () => {
     expect(button).toHaveClass('h-11');
   });
 
+  it('keeps icon buttons square, without the text padding that squeezed their icons', () => {
+    render(
+      <Button variant="outline" size="icon" aria-label="Settings">
+        <svg />
+      </Button>
+    );
+    const button = screen.getByRole('button', { name: 'Settings' });
+    expect(button).toHaveClass('h-10', 'w-10');
+    expect(button).not.toHaveClass('px-4');
+  });
+
   it('handles click events', () => {
     const handleClick = jest.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
