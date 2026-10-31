@@ -92,8 +92,10 @@ global.Headers = class Headers {
 } as any;
 
 // Mock next-auth
+// next-auth/react ships as ESM that jest does not transform, so it is mocked whole
+// (requireActual would fail to parse it in any test that imports it).
 jest.mock('next-auth/react', () => ({
-  ...jest.requireActual('next-auth/react'),
+  SessionProvider: ({ children }: { children: unknown }) => children,
   signIn: jest.fn(),
   signOut: jest.fn(),
   useSession: jest.fn(() => ({
