@@ -32,5 +32,10 @@ export default async function DashboardPage() {
     orderBy: { createdAt: 'desc' },
   });
 
-  return <DashboardClient teams={teams} user={session.user} />;
+  return <DashboardClient teams={teams} user={{
+        id: session.user.id,
+        name: session.user.name ?? null,
+        email: session.user.email ?? '',
+        image: session.user.image ?? null,
+      }} />;
 }

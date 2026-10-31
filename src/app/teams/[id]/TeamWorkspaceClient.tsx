@@ -21,7 +21,7 @@ interface User {
 interface TeamMember {
   id: string;
   role: 'LEAD' | 'MEMBER';
-  createdAt: string;
+  createdAt: Date | string;
   user: User;
 }
 
@@ -39,7 +39,7 @@ interface TeamWorkspaceClientProps {
   team: Team;
   currentUserId: string;
   isLead: boolean;
-  membership: TeamMember;
+  membership: { id: string; role: 'LEAD' | 'MEMBER' };
 }
 
 export default function TeamWorkspaceClient({

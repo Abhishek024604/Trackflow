@@ -18,7 +18,8 @@ jest.mock('@/lib/prisma', () => ({
   },
 }));
 
-const mockHash = hash as jest.MockedFunction<typeof hash>;
+// bcryptjs.hash is overloaded; type the mock by its promise form
+const mockHash = hash as unknown as jest.Mock<Promise<string>, [string, number]>;
 const mockPrisma = require('@/lib/prisma').prisma;
 
 describe('/api/auth/signup - validation logic', () => {
