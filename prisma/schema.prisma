@@ -27,6 +27,7 @@ model User {
   assignedIssues  Issue[]       @relation("IssueAssignee")
   comments        Comment[]
   feedEvents      FeedEvent[]
+  mentionTags     MentionTag[]
 }
 
 model Team {
@@ -129,35 +130,53 @@ enum Category {
   IMPROVEMENT
 }
 
+// STORY-003 (CMP-006): Comment, MentionTag and FeedEvent follow CMP-007 (lld/CMP-007/lld.md).
+// Issue is defined by STORY-002 (CMP-004); comments reference it via Issue.comments.
+
 model Comment {
   id        String   @id @default(cuid())
+  text      String
   issueId   String
-  userId    String
-  content   String
+  authorId  String
   parentId  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  issue   Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  parent  Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: SetNull)
-  replies Comment[] @relation("CommentReplies")
+  issue    Issue        @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  author   User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent   Comment?     @relation("CommentReplies", fields: [parentId], references: [id], onDelete: SetNull)
+  replies  Comment[]    @relation("CommentReplies")
+  mentions MentionTag[]
 
-  @@index([issueId])
+  @@index([issueId, createdAt(sort: Desc)])
+  @@index([authorId])
+}
+
+model MentionTag {
+  id        String @id @default(cuid())
+  commentId String
+  userId    String
+
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId])
   @@index([userId])
 }
 
 model FeedEvent {
-  id        String   @id @default(cuid())
-  teamId    String
-  userId    String
-  type      String
-  payload   Json
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  teamId      String
+  actorId     String
+  action      String
+  targetType  String
+  targetId    String
+  description String
+  timestamp   DateTime @default(now())
 
-  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team  Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  actor User @relation(fields: [actorId], references: [id], onDelete: Cascade)
 
-  @@index([teamId])
-  @@index([teamId, createdAt])
+  @@index([teamId, timestamp(sort: Desc)])
+  @@index([actorId])
 }
