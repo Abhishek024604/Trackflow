@@ -2,9 +2,13 @@
 
 > What the arena decided and where it stands: the relevant points of the team’s discussions, not the chat itself. Written by the arena’s AI; on days it could not, from the recorded decisions. Commits and stage moves are in [PROGRESS.md](PROGRESS.md).
 
-**At a glance:** 2 key decisions · 0 open questions · 1 day recorded · last updated Friday, 30 October 2026
+**At a glance:** 3 key decisions · 0 open questions · 2 days recorded · last updated Saturday, 31 October 2026
 
 ## Key decisions
+
+### Saturday, 31 October 2026
+
+- **BUILD gate approved by John Smith, with architecture-drivers.md**
 
 ### Friday, 30 October 2026
 
@@ -16,6 +20,12 @@
 None right now.
 
 ## Day by day
+
+### Saturday, 31 October 2026
+
+> BUILD was approved and the cycle moved to TEST.
+
+_Written from the recorded decisions: the AI could not summarise this day._
 
 ### Friday, 30 October 2026
 

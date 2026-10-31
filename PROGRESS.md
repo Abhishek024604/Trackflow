@@ -1,6 +1,6 @@
 # Progress
 
-> **Now:** Cycle 1 · BUILD (active)
+> **Now:** Cycle 1 · TEST (active)
 >
 > The arena’s project log, kept by the app from the record: git commits with their authors and stages, stage moves and approvals, pushes and versions. Newest first. What the team discussed and decided is in [STATE.md](STATE.md).
 
@@ -8,14 +8,20 @@
 
 - ✓ **PLAN** · approved Friday, 30 October 2026 by Abhishek Singh
 - ✓ **DESIGN** · approved Friday, 30 October 2026 by John Smith
-- ● **BUILD** · in progress
-- ○ TEST
+- ✓ **BUILD** · approved Saturday, 31 October 2026 by John Smith
+- ● **TEST** · in progress
 - ○ DEPLOY
 - ○ MAINTAIN
 
-**At a glance:** 4 commits · 2 stage moves · 2 gate approveds · 2 log entries
+**At a glance:** 4 commits · 3 stage moves · 3 gate approveds · 3 log entries
 
 ## Timeline
+
+### Saturday, 31 October 2026
+
+**Stage moves and gates**
+
+- 16:21 IST · Cycle 1 · BUILD → TEST · approved by John Smith
 
 ### Friday, 30 October 2026
 
@@ -38,6 +44,35 @@
 - 22:59 IST · PLAN · `47c0154` readme changes · by Abhishek024604
 
 ## Log
+
+### Saturday, 31 October 2026
+
+#### 16:21 IST · BUILD gate approved
+
+_After a gate approval · Cycle 1 · TEST · covers since 2026-10-30 19:08 IST_
+
+**Approved versions**
+
+- requirements-story-003.md v1 · approved by Abhishek Singh · 19:48 IST
+- architecture-ADR-0002-postgres-prisma.md v1 · approved by Abhishek Singh · 19:48 IST
+- architecture-ADR-0001-architecture-style.md v1 · approved by Abhishek Singh · 19:48 IST
+- requirements-story-002.md v1 · approved by Abhishek Singh · 19:48 IST
+- requirements-story-001.md v1 · approved by Abhishek Singh · 19:48 IST
+- requirements-epic-001.md v1 · approved by Abhishek Singh · 19:48 IST
+- hld-flow-flw-003.drawio v1 · approved by Abhishek Singh · 19:48 IST
+- hld-flow-flw-002.drawio v1 · approved by Abhishek Singh · 19:48 IST
+- hld-flow-flw-001.drawio v1 · approved by Abhishek Singh · 19:48 IST
+- hld-deployment.drawio v1 · approved by Abhishek Singh · 19:48 IST
+- hld-containers.drawio v1 · approved by Abhishek Singh · 19:48 IST
+- hld-context.drawio v1 · approved by Abhishek Singh · 19:48 IST
+- hld.md v1 · approved by Abhishek Singh · 19:48 IST
+- plan-goal.md v1 · approved by Abhishek Singh · 19:48 IST
+- lld-CMP-002--component.drawio v1 · approved by Abhishek Singh · 19:48 IST
+- lld-CMP-002--openapi.yaml v1 · approved by Abhishek Singh · 19:48 IST
+- lld-CMP-002.md v1 · approved by Abhishek Singh · 19:48 IST
+- lld-CMP-003.md v1 · approved by Abhishek Singh · 19:48 IST
+- lld-CMP-005.md v1 · approved by Abhishek Singh · 19:48 IST
+- lld-CMP-006.md v1 · approved by Abhishek Singh · 19:48 IST
 
 ### Friday, 30 October 2026
 
