@@ -17,6 +17,7 @@ beforeEach(() => {
     prefetch: jest.fn(),
     back: jest.fn(),
     refresh: mockRefresh,
+    forward: jest.fn(),
   });
 
   // Mock fetch

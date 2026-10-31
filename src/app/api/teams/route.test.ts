@@ -100,7 +100,7 @@ describe('/api/teams - handler logic', () => {
 
   it('checks authentication for GET', async () => {
     // Simulate auth check
-    const session = null; // unauthenticated
+    const session = null as { user?: { id?: string } } | null; // unauthenticated
     if (!session?.user?.id) {
       // Would return 401
       expect(session).toBeNull();
@@ -108,7 +108,7 @@ describe('/api/teams - handler logic', () => {
   });
 
   it('checks authentication for POST', async () => {
-    const session = null; // unauthenticated
+    const session = null as { user?: { id?: string } } | null; // unauthenticated
     if (!session?.user?.id) {
       // Would return 401
       expect(session).toBeNull();

@@ -13,7 +13,7 @@ interface Team {
   id: string;
   name: string;
   ownerId: string;
-  createdAt: string;
+  createdAt: Date | string;
   owner: {
     id: string;
     name: string | null;
