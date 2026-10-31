@@ -13,7 +13,7 @@
 - ○ DEPLOY
 - ○ MAINTAIN
 
-**At a glance:** 4 commits · 3 stage moves · 3 gate approveds · 3 log entries
+**At a glance:** 27 commits · 3 stage moves · 3 gate approveds · 3 log entries
 
 ## Timeline
 
@@ -22,6 +22,30 @@
 **Stage moves and gates**
 
 - 16:21 IST · Cycle 1 · BUILD → TEST · approved by John Smith
+
+**Commits**
+
+- 05:57 IST · BUILD · `4c113eb` chore: project setup with Next.js, TypeScript, Prisma, and Tailwind · by Lokie Ferguson
+- 06:20 IST · BUILD · `e482367` Merge pull request #2 from Abhishek024604/feat/story-001-authentication-team-workspace · by Abhishek024604
+- 06:37 IST · BUILD · `ef7422a` chore: add missing @auth/prisma-adapter and @types/jest, fix existing type errors · by Lokie Ferguson
+- 06:37 IST · BUILD · `c8ebe03` chore: add missing @auth/prisma-adapter and @types/jest, fix existing type errors · by Lokie Ferguson
+- 06:40 IST · BUILD · `1a136b4` feat: project board with columns, drag and drop, priorities and C shortcut · by Lokie Ferguson
+- 06:40 IST · BUILD · `dbb0d8e` feat: issue and board API with the Done authorization rule · by Lokie Ferguson
+- 06:45 IST · BUILD · `8e9cd9e` feat: comment thread, activity feed UI and team activity page · by Lokie Ferguson
+- 06:45 IST · BUILD · `650799f` feat: comments API with @mentions and team activity feed API · by Lokie Ferguson
+- 06:47 IST · BUILD · `2035427` fix: type issue route handlers and narrow the member check by a discriminant · by Lokie Ferguson
+- 06:47 IST · BUILD · `358a8f2` test: issue API (incl. 403 on Done) and board component tests · by Lokie Ferguson
+- 06:48 IST · BUILD · `96e3f9e` chore: demo seed with 4 people, 2 projects and 12 issues · by Lokie Ferguson
+- 06:51 IST · BUILD · `d967066` test: comment thread, markdown and activity feed components · by Lokie Ferguson
+- 06:51 IST · BUILD · `8a90275` test: comments and feed API routes, activity recording and mention parsing · by Lokie Ferguson
+- 06:56 IST · BUILD · `9692420` Merge pull request #3 from Abhishek024604/feat/story-002-tasks-priorities-on-a-project-board · by Abhishek024604
+- 06:56 IST · BUILD · `0d93622` Merge pull request #4 from Abhishek024604/feat/story-003-comments-team-activity-feed · by Abhishek024604
+- 15:31 IST · BUILD · `7377efd` style: one Linear-like dark theme, a shared header with Sign out, workspace polish · by Lokie Ferguson
+- 15:31 IST · BUILD · `0f04dd1` fix: wire the shadcn colour tokens so primary buttons render · by Lokie Ferguson
+- 15:31 IST · BUILD · `c221c9c` fix: sign out through Auth.js instead of a custom route · by Lokie Ferguson
+- 15:31 IST · BUILD · `a2b2c79` chore: seed comments, a reply, an @mention and activity feed events · by Lokie Ferguson
+- 15:33 IST · BUILD · `45baa35` Merge pull request #5 from Abhishek024604/fix/ui-polish · by Abhishek024604
+- 16:21 IST · TEST · `8a0dbf9` Approve BUILD gate · cycle 1 → TEST · by John Smith
 
 ### Friday, 30 October 2026
 
@@ -35,6 +59,8 @@
 
 - 14:43 IST · DESIGN · `393c8e2` Approve PLAN gate · cycle 1 → DESIGN · by Abhishek Singh
 - 19:09 IST · BUILD · `d5f1567` Approve DESIGN gate · cycle 1 → BUILD · by John Smith
+- 20:22 IST · BUILD · `099fa76` docs: approved plan and design documents (cycle 1) · by ParallelFlow AI
+- 20:26 IST · BUILD · `2e59425` Merge pull request #1 from Abhishek024604/docs/approved-plan-design · by Abhishek024604
 
 ### Thursday, 29 October 2026
 

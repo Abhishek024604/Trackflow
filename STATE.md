@@ -23,9 +23,7 @@ None right now.
 
 ### Saturday, 31 October 2026
 
-> BUILD was approved and the cycle moved to TEST.
-
-_Written from the recorded decisions: the AI could not summarise this day._
+> The cycle moved from BUILD to TEST after the BUILD gate was approved. John Smith approved the BUILD gate on 31 Oct with architecture-drivers.md; the team is now in stage TEST.
 
 ### Friday, 30 October 2026
 
