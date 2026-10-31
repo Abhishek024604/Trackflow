@@ -56,5 +56,21 @@ export default async function TeamWorkspacePage({
 
   const isLead = membership.role === 'LEAD';
 
-  return <TeamWorkspaceClient team={team} currentUserId={session.user.id} isLead={isLead} membership={membership} />;
+  // Issues per board column (an issue's status is its column name).
+  const statusCounts = await prisma.issue.groupBy({
+    by: ['status'],
+    where: { teamId: id },
+    _count: { _all: true },
+  });
+  const issueCounts = Object.fromEntries(statusCounts.map((row) => [row.status, row._count._all]));
+
+  return (
+    <TeamWorkspaceClient
+      team={team}
+      currentUserId={session.user.id}
+      isLead={isLead}
+      membership={membership}
+      issueCounts={issueCounts}
+    />
+  );
 }

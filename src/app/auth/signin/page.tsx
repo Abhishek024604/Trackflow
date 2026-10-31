@@ -66,10 +66,16 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-900">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12">
+      <div className="mb-8 flex items-center gap-2 text-base font-semibold text-foreground">
+        <span aria-hidden className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-sm font-bold text-primary-foreground">
+          T
+        </span>
+        TrackFlow
+      </div>
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
+          <CardTitle className="text-center text-xl font-semibold">Welcome back</CardTitle>
           <CardDescription className="text-center">
             Sign in to your TrackFlow account
           </CardDescription>
@@ -95,7 +101,7 @@ export default function SignInPage() {
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+              <span className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-card px-2 text-muted-foreground">
@@ -116,7 +122,7 @@ export default function SignInPage() {
                 disabled={isLoading}
               />
               {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
+                <p className="text-sm text-red-400">{errors.email.message}</p>
               )}
             </div>
 
@@ -125,7 +131,7 @@ export default function SignInPage() {
                 <Label htmlFor="password">Password</Label>
                 <Link
                   href="/auth/forgot-password"
-                  className="text-sm text-primary hover:underline"
+                  className="text-sm text-indigo-300 hover:text-indigo-200 hover:underline"
                 >
                   Forgot password?
                 </Link>
@@ -139,7 +145,7 @@ export default function SignInPage() {
                 disabled={isLoading}
               />
               {errors.password && (
-                <p className="text-sm text-red-500">{errors.password.message}</p>
+                <p className="text-sm text-red-400">{errors.password.message}</p>
               )}
             </div>
 
@@ -151,7 +157,7 @@ export default function SignInPage() {
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
-            <Link href="/auth/signup" className="text-primary hover:underline font-medium">
+            <Link href="/auth/signup" className="font-medium text-indigo-300 hover:text-indigo-200 hover:underline">
               Sign up
             </Link>
           </p>

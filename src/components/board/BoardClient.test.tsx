@@ -72,6 +72,19 @@ describe('BoardClient', () => {
     expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
   });
 
+  it('opens "New issue" on arrival when asked to (Create issue from the workspace)', async () => {
+    window.history.replaceState(null, '', '/teams/t1/board?new=1');
+    setupFetch(boardData());
+    render(<BoardClient teamId="t1" openNewIssue />);
+
+    expect(await screen.findByRole('dialog', { name: 'New issue' })).toBeInTheDocument();
+    expect(window.location.search).toBe('');
+
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    window.history.replaceState(null, '', '/');
+  });
+
   it('opens "New issue" with the C shortcut, but not while typing', async () => {
     setupFetch(boardData());
     render(<BoardClient teamId="t1" />);

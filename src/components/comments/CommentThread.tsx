@@ -225,7 +225,7 @@ function CommentNode({ node, depth, currentUserId, members, mentionHandles, onRe
       ) : (
         <article
           aria-label={`Comment by ${authorName}`}
-          className="group rounded-lg border border-gray-200 bg-white px-3 py-2 dark:border-gray-700/80 dark:bg-gray-800/60"
+          className="group rounded-lg border border-gray-200 bg-white px-3 py-2 dark:border-border dark:bg-card"
         >
           <header className="mb-1 flex items-center gap-2">
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 text-xs font-medium text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">
