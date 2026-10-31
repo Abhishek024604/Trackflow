@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { X } from 'lucide-react';
+import Link from 'next/link';
+import { MessageSquare, X } from 'lucide-react';
 import { PRIORITIES, PRIORITY_LABELS, type IssuePriority } from '@/lib/issues';
 import { displayName, type BoardColumnData, type BoardIssue, type BoardMember, type IssueFormValues } from './types';
 
@@ -172,7 +173,16 @@ export function IssueDialog({ issue, columns, members, defaultStatus, onSubmit, 
           </div>
 
           <div className="flex items-center justify-between border-t border-zinc-800 px-5 py-3">
-            <div>
+            <div className="flex items-center gap-1">
+              {isEdit && (
+                <Link
+                  href={`/teams/${issue.teamId}/discussions/${issue.id}`}
+                  className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <MessageSquare className="h-3.5 w-3.5" aria-hidden="true" />
+                  Comments
+                </Link>
+              )}
               {isEdit && onDelete && (
                 <button
                   type="button"
