@@ -4,8 +4,8 @@ Task Tracker Application for software teams
 
 This repository is kept by ParallelFlow. Each commit is an approved stage gate or an update of the logs.
 
-- [PROGRESS.md](PROGRESS.md): the project log, with stage moves, approvals, pushes, versions and their authors, and commits, by date
-- [STATE.md](STATE.md): what the team discussed and decided, day by day
+- [PROGRESS.md](PROGRESS.md): the activity log, every change to the arena (loop, code, files, team, AI, settings) by day, with where the loop stands now
+- [STATE.md](STATE.md): the team’s story, with its ground rules, key decisions and a chapter per day
 - [AGENTS.md](AGENTS.md): how AI coding agents work in this repository
 
 ## Approved documents

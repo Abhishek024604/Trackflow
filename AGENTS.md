@@ -15,7 +15,8 @@ Task Tracker Application for software teams
 1. `docs/design/architecture/` and `docs/design/`: the architecture, HLD and LLDs. Follow them.
 2. `docs/plan/`: the plan and the requirements. `docs/product/`: the product documents, backlog and stories.
 3. `docs/design/architecture/decisions/`: the architecture decisions (ADRs).
-4. `PROGRESS.md` (where the project is) and `STATE.md` (what the team discussed and decided).
+4. `PROGRESS.md` (the activity log: every change to the arena, newest first, with where the loop stands now) and, when present, `STATE.md` (the team’s story: ground rules, key decisions, open threads and a chapter per day) with its graph in `docs/state/graph.json` (decisions, rules, requirements, questions, risks and actions, with their keys such as D-003).
+5. Follow the ground rules in `STATE.md` and do not undo a key decision without raising it in the arena.
 
 ## How to work
 
@@ -23,7 +24,7 @@ Task Tracker Application for software teams
 - Small commits, each with a clear message.
 - When the work is ready, open a pull request into the default branch. Say what changed and how you tested it.
 - Never push to the default branch (main) and never merge a pull request: people review and merge.
-- Do not edit README.md, PROGRESS.md, STATE.md, AGENTS.md or the documents under `docs/`: ParallelFlow
+- Do not edit README.md, PROGRESS.md, STATE.md, AGENTS.md or the documents under `docs/` (including `docs/progress/` and `docs/state/`): ParallelFlow
   writes them from approved documents. Suggest changes in the arena instead.
 
 ## Approved documents
